@@ -7,7 +7,6 @@
 
 ```
 socket.close() 會寄送，但是無法使用 conn.send('') 這種寫法來寄。
-
 ```
 
 ![Alt text](https://raw.githubusercontent.com/scott1028/unix-socket-study/master/recv_buffer_size.jpg "Recv Buffer Size")
