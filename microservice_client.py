@@ -10,6 +10,7 @@ print >>sys.stderr, 'connecting to %s' % server_address
 try:
     sock.connect(server_address)
     sock.send('112233')
+    import pdb; pdb.set_trace()
     sock.send('DONE')  # for server detect
     sock.close()
 except socket.error, msg:
