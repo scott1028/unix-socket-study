@@ -1,4 +1,5 @@
 # coding: utf-8
+# ref: http://stackoverflow.com/questions/38386870/will-tcp-socket-server-client-connection-fd-cause-memory-leak
 
 import socket
 import os, os.path
@@ -33,8 +34,9 @@ while True:
         break
     else:
         print "-" * 20
-        print data
+        print [ data ]
         # 單獨一個 Datagram 恰好等於 = DONE 就會結束回圈
+        # Client send 1025 bytes 的 case 不會觸發 "not data" 這個條件.
         print "DONE" == data
         if "DONE" == data:
             # Detect "DONE" Keywork for END Client
