@@ -1,0 +1,15 @@
+{
+  "name": "microservice-client",
+  "version": "0.0.0",
+  "dependencies": {},
+  "devDependencies": {
+    "npmlog": "*"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "scripts": {
+    "test": "",
+    "preinstall": ""
+  }
+}
