@@ -12,6 +12,12 @@ try:
     sock.send('1' * 1025)
     # import pdb; pdb.set_trace()
     sock.send('DONE')  # for server detect
+
+    # This will not work, you can not use sock.send(''), you should use sock.close() to send empty data.
+    # sock.send('')    
+    # import pdb; pdb.set_trace()
+
+    # This will send a '' length = 0 data to server
     sock.close()
 except socket.error, msg:
     print >>sys.stderr, msg
