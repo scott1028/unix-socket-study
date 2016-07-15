@@ -1,9 +1,13 @@
 #### TCP Server .recv( BufferSize )
 
 - Client send 0 bytes 的 Packet 給 Server 代表關閉連線。
+- .recv( buffer ) 為每次處理最大的接收 buffer Size。
+- 如果超過就分段處理再 Append 起來才是 Client 寄送的 Data。在 EOF 之前都是同一筆資料。
+- EOF 就是 Client 送了 0 Bytes 長度的資料給 Server 代表 socket.close()。
 
 ```
 socket.close() 會寄送，但是無法使用 conn.send('') 這種寫法來寄。
+
 ```
 
 ![Alt text](https://raw.githubusercontent.com/scott1028/unix-socket-study/master/recv_buffer_size.jpg "Recv Buffer Size")
