@@ -29,6 +29,7 @@ while True:
     data = conn.recv(1024)
 
     if not data:
+        print [ data ]
         # client send data EOF, so break.
         print 'client data recv EOF'
         break
