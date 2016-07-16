@@ -17,6 +17,10 @@ void *task1(void *);
 
 static int connFd;
 
+// 基本上如果 Client 連線後 15 秒沒反應就會被自動斷線(這邊可以驗證秒數)
+static int client_idle_timeout = 15;
+
+
 int main(int argc, char* argv[])
 {
     int pId, portNo, listenFd;
@@ -79,7 +83,7 @@ int main(int argc, char* argv[])
         // 1. 讓 client socket fd recv( ... ) 資料最多等待 15 秒如果超過就當作 Client 離線釋放 Connection！
         // 2. server fd 會收到跟 Client 送斷線訊號一樣的 0 Byte 資料！
         struct timeval tv;
-        tv.tv_sec = 15;  /* 30 Secs Timeout */
+        tv.tv_sec = client_idle_timeout;  /* 30 Secs Timeout */
         tv.tv_usec = 0;  // Not init'ing this can cause strange errors
         setsockopt(connFd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
 
@@ -117,8 +121,11 @@ void *task1 (void *dummyPt)
     {    
         bzero(test, 301);
         
-        
+        // 基本上如果 Client 連線後 15 秒沒反應就會被自動斷線(這邊可以驗證秒數)
+        time_t  timev;
+        cout << "[before recv]=" << time(&timev) << endl;
         read(connFd, test, 300);
+        cout << "[after recv]=" << time(&timev) << endl;
         
         string tester (test);
         cout << "[data][start]" << endl;
@@ -127,15 +134,19 @@ void *task1 (void *dummyPt)
         cout << "[data][end]" << endl;
         
         if(tester == ""){
+            cout << "[exit]=" << time(&timev) << endl;
             cout << "client exit#1" << endl;
             break;  // recv zero bytes, client close or exit program
         }
         
         if(tester == "exit"){
+            cout << "[exit]=" << time(&timev) << endl;
             cout << "client exit#2" << endl;
             break;  // special keyword for close or exit
         }
     }
+
+    // avoid memory leak if cleint no response make recv timeout and run here code.
     cout << "\nClosing thread and conn" << endl;
     close(connFd);
 }
