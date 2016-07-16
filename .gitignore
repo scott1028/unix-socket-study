@@ -1,2 +1,4 @@
 node_modules/
 *.pyc
+client.out
+server.out
