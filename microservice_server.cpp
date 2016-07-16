@@ -75,6 +75,15 @@ int main(int argc, char* argv[])
         //this is where client connects. svr will hang in this mode until client conn
         connFd = accept(listenFd, (struct sockaddr *)&clntAdd, &len);
 
+
+        // 1. 讓 client socket fd recv( ... ) 資料最多等待 15 秒如果超過就當作 Client 離線釋放 Connection！
+        // 2. server fd 會收到跟 Client 送斷線訊號一樣的 0 Byte 資料！
+        struct timeval tv;
+        tv.tv_sec = 15;  /* 30 Secs Timeout */
+        tv.tv_usec = 0;  // Not init'ing this can cause strange errors
+        setsockopt(connFd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
+
+
         if (connFd < 0)
         {
             cerr << "Cannot accept connection" << endl;
@@ -112,11 +121,20 @@ void *task1 (void *dummyPt)
         read(connFd, test, 300);
         
         string tester (test);
+        cout << "[data][start]" << endl;
+        cout << (tester == "") << endl;  // 0: False, 1: True
         cout << tester << endl;
+        cout << "[data][end]" << endl;
         
+        if(tester == ""){
+            cout << "client exit#1" << endl;
+            break;  // recv zero bytes, client close or exit program
+        }
         
-        if(tester == "exit")
-            break;
+        if(tester == "exit"){
+            cout << "client exit#2" << endl;
+            break;  // special keyword for close or exit
+        }
     }
     cout << "\nClosing thread and conn" << endl;
     close(connFd);
