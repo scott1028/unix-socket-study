@@ -23,3 +23,4 @@ socket.close() 會寄送，但是無法使用 conn.send('') 這種寫法來寄�
 - 已 Single Thread 來說一次只會處理一個其他的連線會放在 Connection Queue 等待處理。但 Connection Queue 到達上線會出現 ECONNREFUSED Error。
 
 ![Alt text](https://raw.githubusercontent.com/scott1028/unix-socket-study/master/socket_connection_queue_limit_by_listen_func.png "Connection Queue Limit")
+![Alt text](https://raw.githubusercontent.com/scott1028/unix-socket-study/master/backlog_detail.png "backlog")
