@@ -31,4 +31,4 @@ var server = net.createServer(function(socket) {
 });
 
 console.log('$ telnet 0.0.0.0 3333')
-server.listen(3333, '0.0.0.0');
+server.listen(process.env.PORT || 3333, '0.0.0.0');
